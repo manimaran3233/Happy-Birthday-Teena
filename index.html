@@ -101,7 +101,7 @@
             position: fixed; top: 20px; right: 20px; background: white; width: 50px; height: 50px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 10px rgba(227, 27, 35, 0.3);
-            border: 2px solid #d32f2f; z-index: 1000; transition: all 0.3s ease;
+            border: 2px solid #d32f2f; z-index: 4000; transition: all 0.3s ease;
         }
         .music-control.playing {
             background: #d32f2f; color: white; box-shadow: 0 0 12px rgba(227, 27, 35, 0.8);
@@ -146,7 +146,7 @@
         #po-wrapper {
             position: fixed; bottom: 10px; right: 20px;
             transform: scale(var(--po-scale));
-            z-index: 1500; display: flex; flex-direction: column; align-items: center;
+            z-index: 3500; display: flex; flex-direction: column; align-items: center;
             transform-origin: bottom center;
             pointer-events: none; /* Crucial fix: wrapper won't block clicks */
         }
@@ -326,12 +326,14 @@
         .cake-hint { font-size: 0.9rem; color: #c41e3a; text-align: center; margin-top: 15px; animation: blink 1.5s infinite; font-weight: 600;}
 
         /* ===== SPECIFIC PAGE STYLES (Letter, Gallery, Timeline) ===== */
-        .letter-container { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); padding: 35px 25px; border-radius: 40px; box-shadow: 0 15px 40px rgba(227, 27, 35, 0.15); margin: 20px 0 100px; border: 2px solid white; min-height: 80vh; position: relative; overflow: hidden; }
+        .letter-container { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); padding: 35px 25px; border-radius: 40px; box-shadow: 0 15px 40px rgba(227, 27, 35, 0.15); margin: 20px 0 100px; border: 2px solid white; min-height: 80vh; position: relative; overflow: hidden; z-index: 10; }
         
-        /* 6 Image Cycler Overlay */
-        .letter-overlay { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.2; pointer-events: none; z-index: 0; transition: background-image 1.5s ease-in-out; }
-        
-        .letter-content { position: relative; z-index: 1; }
+        /* 6 Image Cycler Overlay - Updated for smooth fading */
+        .letter-overlay { position: absolute; inset: 0; border-radius: 40px; pointer-events: none; z-index: 0; overflow: hidden; }
+        .bg-layer { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s ease-in-out; }
+        .bg-layer.active { opacity: 0.35; } /* Increased opacity for better visibility */
+
+        .letter-content { position: relative; z-index: 20; }
         .letter-title { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: #d32f2f; text-align: center; margin-bottom: 30px; border-bottom: 2px dashed #ffb3d9; padding-bottom: 15px; }
         .love-message { font-size: 1.1rem; line-height: 1.8; color: #333333; margin-bottom: 30px; min-height: 300px; }
         .love-message p { margin-bottom: 20px; font-weight: 600; display: none; } /* Hidden initially for typewriter */
@@ -378,8 +380,8 @@
         @keyframes confettiFall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
         
         /* Continuous Blossom Animation Layer */
-        .blossom-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: hidden; display: none; }
-        .blossom-piece { position: absolute; top: -10%; font-size: 1.5rem; animation: blossomFall linear forwards; opacity: 0.7;}
+        .blossom-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; overflow: hidden; display: none; }
+        .blossom-piece { position: absolute; top: -10%; font-size: 1.5rem; animation: blossomFall linear forwards; opacity: 0.5;}
         @keyframes blossomFall { 
             0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
             10% { opacity: 0.8; }
@@ -400,7 +402,7 @@
             <input type="password" id="passwordInput" class="password-input" placeholder="Enter password" maxlength="20" autofocus>
             <button class="unlock-btn" id="unlockBtn">Unlock ❤️</button>
             <div id="errorMessage" class="error-message"></div>
-            <div class="hint">(Hint: Na unna eppadi koopuduven (Note 1st letter caps))</div>
+            <div class="hint">(Enter Your Name (First Letter Capital))</div>
         </div>
     </div>
 
@@ -467,7 +469,7 @@
                         <!-- Paragraphs injected via JS for Typewriter -->
                     </div>
                     <div class="signature-area" id="heartLink">
-                        By Akilesh ❤️<span class="signature-tooltip">Click here to surprise more 🎁</span>
+                        By Akilesh ❤️<span class="signature-tooltip">More Surprises 🎁</span>
                     </div>
                 </div>
             </div>
@@ -476,14 +478,14 @@
         <!-- ========== PHOTO GALLERY PAGE ========== -->
         <div id="page3" class="page">
             <div class="gallery-container">
-                <h2 class="gallery-header scroll-animate">Recent and Fav❤️ Pics of Yours</h2>
+                <h2 class="gallery-header scroll-animate">Recent and Fav❤️ Pics</h2>
                 <div class="scroll-hint scroll-animate" style="text-align: center; color: #c41e3a; margin-bottom:20px;">↓ Scroll down slowly ↓</div>
                 <div class="photo-stack" id="photoStack">
-                    <div class="photo-item"><img src="https://Images/T1.jpg.jpeg" alt="Pic"><div class="photo-caption">The day I fell even more in love ❤️</div></div>
-                    <div class="photo-item"><img src="https://Images/T2.jpg.jpeg" alt="Pic"><div class="photo-caption">One of those pics where I fell for you again 😘</div></div>
-                    <div class="photo-item"><img src="https://Images/T3.jpg.jpeg" alt="Pic"><div class="photo-caption">Your smile that still makes my heart skip 💓</div></div>
-                    <div class="photo-item"><img src="https://Images/T4.jpg.jpeg" alt="Pic"><div class="photo-caption">Beautiful inside and out, always 💕</div></div>
-                    <div class="photo-item"><img src="https://Images/T5.jpg.jpeg" alt="Pic"><div class="photo-caption">Can't stop smiling when I see you 💫</div></div>
+                    <div class="photo-item"><img src="./Images/T1.jpg.jpeg" alt="Pic"><div class="photo-caption">The day I fell even more in love ❤️</div></div>
+                    <div class="photo-item"><img src="./Images/T2.JPG.jpeg" alt="Pic"><div class="photo-caption">One of those pics where I fell for you again 😘</div></div>
+                    <div class="photo-item"><img src="./Images/T3.JPG.jpeg" alt="Pic"><div class="photo-caption">Your smile that still makes my heart skip 💓</div></div>
+                    <div class="photo-item"><img src="./Images/T4.JPG.jpeg" alt="Pic"><div class="photo-caption">Beautiful inside and out, always 💕</div></div>
+                    <div class="photo-item"><img src="./Images/T5.JPG.jpeg" alt="Pic"><div class="photo-caption">Can't stop smiling when I see you 💫</div></div>
                 </div>
                 <button class="nav-btn" id="momentsBtn">Our Moments 💫</button>
                 <button class="nav-btn" id="loveYouBtn">Happy Birthday 🎂</button>
@@ -493,7 +495,7 @@
         <!-- ========== MOMENTS TIMELINE PAGE ========== -->
         <div id="page4" class="page">
             <div class="timeline-container">
-                <h2 class="timeline-header scroll-animate">Everything About You 💘</h2>
+                <h2 class="timeline-header scroll-animate">Everything About You 💝</h2>
                 <div class="timeline">
                     <div class="timeline-item scroll-animate"><div class="timeline-dot"></div><div class="timeline-date">A Beautiful Soul</div><div class="timeline-text">Like a rare gem, your presence brings light to everyone around you.</div></div>
                     <div class="timeline-item scroll-animate"><div class="timeline-dot"></div><div class="timeline-date">Your Kindness</div><div class="timeline-text">As the proverb goes, "A kind heart is a fountain of gladness." You make everything bloom.</div></div>
@@ -512,6 +514,26 @@
     <div class="confetti-layer" id="confettiLayer"></div>
 
     <script>
+        // ========== AUDIO AUTOPLAY (Triggered on first interaction) ==========
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+        
+        function initAudioOnFirstInteraction() {
+            if (!isPlaying && bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    document.getElementById('musicToggle').classList.add('playing');
+                    isPlaying = true;
+                }).catch(e => console.log('Audio autoplay prevented until further interaction.'));
+            }
+            // Remove listeners after initial interaction
+            document.removeEventListener('click', initAudioOnFirstInteraction);
+            document.removeEventListener('touchstart', initAudioOnFirstInteraction);
+        }
+        
+        // Listen globally for the very first interaction
+        document.addEventListener('click', initAudioOnFirstInteraction);
+        document.addEventListener('touchstart', initAudioOnFirstInteraction);
+
         // ========== LOGIN FLOWER ANIMATIONS ==========
         let loginInterval;
         function startLoginAnimations() {
@@ -529,21 +551,19 @@
             }, 300);
         }
 
-        // ========== AUTH & MUSIC ==========
-        const CORRECT_PASSWORD = "12345";
+        // ========== AUTH ==========
+        const CORRECT_PASSWORDS = ["Akilesh", "Teena"];
         const passwordPage = document.getElementById('passwordPage');
         const mainContent = document.getElementById('mainContent');
-        const bgMusic = document.getElementById('bgMusic');
-        let isPlaying = false;
 
         if (sessionStorage.getItem('unlocked') !== 'true') startLoginAnimations();
-        else unlockPage(false);
+        else unlockPage();
 
         document.getElementById('unlockBtn').addEventListener('click', checkAuth);
         document.getElementById('passwordInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAuth(); });
         
         function checkAuth() {
-            if (document.getElementById('passwordInput').value === CORRECT_PASSWORD) unlockPage(true);
+            if (CORRECT_PASSWORDS.includes(document.getElementById('passwordInput').value)) unlockPage();
             else {
                 document.getElementById('errorMessage').textContent = '❌ Try again my love';
                 document.querySelector('.password-container').classList.add('shake');
@@ -551,7 +571,7 @@
             }
         }
 
-        function unlockPage(playMusic) {
+        function unlockPage() {
             passwordPage.style.display = 'none';
             mainContent.style.display = 'block';
             sessionStorage.setItem('unlocked', 'true');
@@ -563,17 +583,11 @@
             } else {
                 window.addEventListener('devicemotion', handleShake);
             }
-
-            if (playMusic) {
-                bgMusic.play().then(() => {
-                    document.getElementById('musicToggle').classList.add('playing');
-                    isPlaying = true;
-                }).catch(e => console.log('Autoplay prevented'));
-            }
             startPoLogic();
         }
 
-        document.getElementById('musicToggle').addEventListener('click', function() {
+        document.getElementById('musicToggle').addEventListener('click', function(e) {
+            e.stopPropagation();
             if (isPlaying) { bgMusic.pause(); this.classList.remove('playing'); } 
             else { bgMusic.play(); this.classList.add('playing'); }
             isPlaying = !isPlaying;
@@ -587,7 +601,6 @@
         let poIdleTimer;
         let walkTimeout;
         
-        // Ensure starting position is bottom right
         poWrapper.style.right = '20px';
         poWrapper.style.left = 'auto';
 
@@ -684,12 +697,22 @@
         let currentBgIndex = 0;
         const overlay = document.getElementById('letterOverlay');
         
+        // Dynamically inject image layer divs for smooth fading
+        letterImages.forEach((src, idx) => {
+            const div = document.createElement('div');
+            div.className = 'bg-layer' + (idx === 0 ? ' active' : '');
+            div.style.backgroundImage = `url('${src}')`;
+            overlay.appendChild(div);
+        });
+
         function cycleBackground() {
-            // Only cycle if page2 is active
             if(document.getElementById('page2').classList.contains('active')) {
-                // Using fallback coloring if image paths don't exist yet
-                overlay.style.backgroundImage = `url('${letterImages[currentBgIndex]}')`;
-                currentBgIndex = (currentBgIndex + 1) % letterImages.length;
+                const layers = overlay.querySelectorAll('.bg-layer');
+                if (layers.length > 0) {
+                    layers[currentBgIndex].classList.remove('active');
+                    currentBgIndex = (currentBgIndex + 1) % layers.length;
+                    layers[currentBgIndex].classList.add('active');
+                }
             }
         }
         setInterval(cycleBackground, 5000);
@@ -699,7 +722,7 @@
         let blossomInterval;
         
         function startBlossoms() {
-            if(blossomInterval) return; // already running
+            if(blossomInterval) return; 
             blossomLayer.style.display = 'block';
             const emojis = ['🌸', '💮'];
             blossomInterval = setInterval(() => {
@@ -728,9 +751,8 @@
             
             // Manage blossoms layer visibility based on page
             if(toId === 'page2') {
-                cycleBackground();
                 triggerMassiveBlast();
-                setTimeout(startBlossoms, 2500); // Start blossoms 2.5s after popper blast
+                setTimeout(startBlossoms, 2500);
             } else if (toId === 'page4') {
                 startBlossoms();
             } else {
@@ -755,7 +777,20 @@
             setTimeout(() => {
                 switchPage('page1', 'page2');
                 startLetterTypewriter();
-                poSpeak("Shh... I'm reading 📖");
+                
+                // On Desktop: move panda to the left side and make him watch the text
+                if (window.innerWidth > 768) {
+                    poWrapper.style.transition = `left 2s ease-in-out`;
+                    poWrapper.style.left = `5%`;
+                    poWrapper.style.right = `auto`;
+                    poWrapper.classList.remove('facing-left'); // ensure facing center
+                    setPoState('walking');
+                    setTimeout(() => { if (poState === 'walking') setPoState('idle'); }, 2000);
+                }
+                
+                // Po comments during reading
+                poSpeak("He really likes you 🥰", 4000);
+
             }, 1500);
         }
 
@@ -865,10 +900,10 @@
             const container = document.getElementById('letterMessage');
             const signature = document.getElementById('heartLink');
             
-            // Check if already typed in this session
             if(sessionStorage.getItem('typed') === 'true') { 
                 container.innerHTML = letterTexts.map(t => `<p class="in-view">${t}</p>`).join('');
                 signature.classList.add('show');
+                if (window.innerWidth > 768) poSpeak("Happy Birthday Teena! 🎂", 5000);
                 return; 
             }
             
@@ -884,7 +919,10 @@
             function type() {
                 if (pIdx >= letterTexts.length) { 
                     sessionStorage.setItem('typed', 'true'); 
-                    signature.classList.add('show'); // Reveal signature block
+                    signature.classList.add('show');
+                    if (window.innerWidth > 768) {
+                        poSpeak("Happy Birthday Teena! 🎂", 5000);
+                    }
                     return; 
                 }
                 
